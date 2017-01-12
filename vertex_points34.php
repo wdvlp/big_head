@@ -1,5 +1,6 @@
 <?php
-    $test="abc"; 
+
+
  //$MyArray = $_POST['variable'];
 		
    // $lat_test=$MyArray[0];
@@ -7,7 +8,6 @@
 	var $id;
 	var $lat;
 	var $lng;
-       
 	
 	function __construct($n,$t,$c){
 		$this->id=$n;
@@ -26,8 +26,8 @@ class DB{
 	function __construct(){
 		
 		$dbhost = "localhost";
-		$account = "root";//登入帳號
-		$password = "";//登入密碼
+		$account = "test";//登入帳號
+		$password = "1234";//登入密碼
 		$this->database = mysql_connect($dbhost,$account,$password);
 		
 		if($this->database){
@@ -36,7 +36,7 @@ class DB{
 		else{
 			//echo "DB connect fail.";
 		}
-		$result = mysql_select_db("test",$this->database);
+		$result = mysql_select_db("db_googlemap",$this->database);
 		if($result){
 			//echo "DB select success.";
 		}else{
@@ -47,9 +47,6 @@ class DB{
 		mysql_close($this->database);
 	}
 }
-
-////
-
 class GoogleBoard extends DB{
 	var $googlemap=array();
 	function __construct(){
@@ -57,22 +54,22 @@ class GoogleBoard extends DB{
 		$this->receiveGooglemap();
 		$this->loaData();
 		$this->showAllGooglemap();
-	
+		//$this->showForm();
+		
+		
 	}
 	
 
 	    function receiveGooglemap(){
 		if(count($_POST) != 0){
-			$this->saveData($_POST['id2'],$_POST['x_lat'],$_POST['x_lng'], $_POST['fn']);
+			$this->saveData($_POST['id2'],$_POST['x_lat'],$_POST['x_lng']);
 		}
-		
+		//$this->saveData();
 	}
 	function saveData($i,$u,$c){
-		
+			
 		$query = "INSERT INTO `all_googlemap`(`id`,`lat`,`lng`) VALUE ('".$i."','".$u."','".$c."');";
 		mysql_query($query);//寫入資料庫
-		
-	
 	}
 	function loaData(){
 		
@@ -89,23 +86,37 @@ class GoogleBoard extends DB{
 	function showAllGooglemap(){
 		foreach($this->googlemap as $m){
 			$m->show();
-		}
+		};
 	}
+/*	function showForm(){
+		echo "<form action'' method='POST' >";
+		echo "variable:"."<input type='text' name='userName' >"."<br>";//Name框框
+		echo "lng:"."<input type='text' name='lng' >";//Content框框
+		echo "<input type='submit' >";//按鈕
+		echo "</from>";
+	}*/
 		
 }
+
 $m = new GoogleBoard();
+//echo $_POST['variable'].'</br>';  //將傳送進來的字元轉成ascii碼
+/*
+$data = json_decode(stripslashes($_POST['data']));
+  // here i would like use foreach:
+
+  foreach($data as $d){
+     echo $d;
+  }*/
 
 ?>
 
-<form id="try1" action="dele.php">
-<input type="submit" value="刪除">
+
+<form name="try" action="dele.php"> 
+<input type="submit" value="dele"> 
 </form> 
 
-<form id="try2" action="copy.php" >
-<input type="submit" value="確認">
-</form>
+<form name="try" action="confirm.php"> 
+<input type="submit" value="confirm"> 
+</form> 
 
-
-
-
-
+ 
